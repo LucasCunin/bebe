@@ -6,7 +6,7 @@ import os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '.')))
 
 from streamlit_autorefresh import st_autorefresh
-from streamlit_cookies_manager import EncryptedCookieManager
+from streamlit_extras.server_side_cookies import EncryptedCookieManager
 from database.database import Base, engine, SessionLocal
 from database.operations import user_operations
 # Importer tous les modèles pour que Base les connaisse
