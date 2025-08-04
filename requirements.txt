@@ -3,4 +3,4 @@ sqlalchemy
 psycopg2-binary # Pour la connexion à une base de données PostgreSQL
 python-dotenv  # Pour lire le fichier .env en local si besoin
 streamlit-autorefresh # Pour la mise à jour en temps réel
-streamlit-extras # Contient un meilleur gestionnaire de cookies
+
