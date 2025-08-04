@@ -4,7 +4,7 @@ from database.database import SessionLocal
 # Importer tous les modèles pour que SQLAlchemy les connaisse
 from database.models import user, proposition, vote, config
 
-from streamlit_extras.server_side_cookies import EncryptedCookieManager
+from streamlit_extras.encrypted_cookie import EncryptedCookieManager
 
 # Clé de chiffrement, doit être la même que dans app.py
 COOKIE_ENCRYPTION_KEY = "LAfermeestjaunepisse_pour_les_cookies"
