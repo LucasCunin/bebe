@@ -1,0 +1,22 @@
+# Fichiers de cache et compilés de Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Environnements virtuels
+.venv
+venv/
+env/
+
+# Fichiers de configuration locaux et secrets.
+# NE JAMAIS PARTAGER SUR GIT !
+.env
+
+# Bases de données locales de test
+*.db
+*.db-journal*
+
+# Dossiers d'IDE (bonne pratique)
+.vscode/
+.idea/
