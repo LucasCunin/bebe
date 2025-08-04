@@ -2,6 +2,7 @@ import sys
 import os
 import argparse
 from sqlalchemy.orm import Session
+from dotenv import load_dotenv
 
 # Configuration du path pour les imports
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
@@ -26,7 +27,9 @@ def reset_all_votes(db: Session):
     db.commit()
     print("Tous les votes ont été réinitialisés.")
 
+
 def main():
+    load_dotenv()
     parser = argparse.ArgumentParser(description="Gère la configuration de l'application.")
     parser.add_argument("--key", type=str, required=True, help="La clé de configuration à modifier (ex: DEFAULT_VOTES).")
     parser.add_argument("--value", type=int, required=True, help="La nouvelle valeur entière pour la clé.")

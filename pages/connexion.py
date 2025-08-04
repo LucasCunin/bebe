@@ -4,14 +4,22 @@ from database.database import SessionLocal
 # Importer tous les modèles pour que SQLAlchemy les connaisse
 from database.models import user, proposition, vote, config
 
+from streamlit_cookies_manager import EncryptedCookieManager
+
+# Clé de chiffrement, doit être la même que dans app.py
+COOKIE_ENCRYPTION_KEY = "LAfermeestjaunepisse_pour_les_cookies"
+
 st.set_page_config(page_title="Qui est-ce ?", page_icon="👋")
 st.title("👋 Qui êtes-vous ?")
 st.write("Dites-nous qui vous êtes pour participer à la fête !")
 
+# Initialiser le gestionnaire de cookies
+cookies = EncryptedCookieManager(key=COOKIE_ENCRYPTION_KEY)
+
 db = SessionLocal()
 
 def login_or_register(pseudo: str):
-    """Connecte un utilisateur ou en crée un s'il n'existe pas."""
+    """Connecte un utilisateur, crée un compte et dépose un cookie."""
     user = user_operations.get_user_by_pseudo(db, pseudo)
     
     if not user:
@@ -26,6 +34,10 @@ def login_or_register(pseudo: str):
         "proposals_left": user.proposals_left,
         "votes_left": user.votes_left,
     }
+    
+    # Déposer le cookie
+    cookies['user_pseudo'] = user.pseudo
+    
     st.success(f"Bienvenue, {user.pseudo} !")
     st.rerun()
 
@@ -34,6 +46,8 @@ def login_or_register(pseudo: str):
 if st.session_state.get("user"):
     st.write(f"Vous êtes déjà connecté en tant que **{st.session_state.user['pseudo']}**.")
     if st.button("Se déconnecter"):
+        # Supprimer le cookie
+        cookies.delete('user_pseudo')
         st.session_state.user = None
         st.rerun()
 else:
@@ -42,8 +56,9 @@ else:
         submitted = st.form_submit_button("Valider")
         
         if submitted:
-            if pseudo:
-                login_or_register(pseudo)
+            clean_pseudo = pseudo.strip() if pseudo else ""
+            if clean_pseudo:
+                login_or_register(clean_pseudo)
             else:
                 st.warning("Veuillez entrer un pseudo.")
 

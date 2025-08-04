@@ -10,11 +10,14 @@ from database.database import SessionLocal
 from database.models import vote as vote_model, user as user_model
 from database.operations import config_operations
 
+from dotenv import load_dotenv
+
 def main():
     """
     Ce script supprime tous les votes existants et réinitialise le compteur
     de votes de chaque utilisateur à la valeur définie dans la configuration.
     """
+    load_dotenv()
     db = SessionLocal()
     
     print("Ce script va supprimer TOUS les votes et réinitialiser les compteurs des utilisateurs.")

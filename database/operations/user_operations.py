@@ -3,8 +3,9 @@ from database.models import user as user_model
 from database.operations import config_operations
 
 def get_user_by_pseudo(db: Session, pseudo: str):
-    """Trouve un utilisateur par son pseudo (insensible à la casse)."""
-    return db.query(user_model.User).filter(user_model.User.pseudo == pseudo.lower()).first()
+    """Trouve un utilisateur par son pseudo (insensible à la casse et aux espaces)."""
+    clean_pseudo = pseudo.strip().lower()
+    return db.query(user_model.User).filter(user_model.User.pseudo == clean_pseudo).first()
 
 def get_user_by_id(db: Session, user_id: int):
     """Trouve un utilisateur par son ID."""
@@ -15,8 +16,16 @@ def create_user(db: Session, pseudo: str):
     default_proposals = config_operations.get_config_value(db, "DEFAULT_PROPOSALS", 3)
     default_votes = config_operations.get_config_value(db, "DEFAULT_VOTES", 5)
     
+    clean_pseudo = pseudo.strip().lower()
+
+    # Vérifier si un utilisateur avec ce pseudo nettoyé n'existe pas déjà
+    existing_user = get_user_by_pseudo(db, clean_pseudo)
+    if existing_user:
+        # Retourner l'utilisateur existant au lieu d'en créer un nouveau
+        return existing_user
+
     db_user = user_model.User(
-        pseudo=pseudo.lower(),
+        pseudo=clean_pseudo,
         proposals_left=default_proposals,
         votes_left=default_votes
     )
